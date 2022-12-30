@@ -1,0 +1,30 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
+  output        = "./"
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String? @db.Text
+  img       String?
+  author_id Int
+
+  @@map("posts")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  email    String @unique
+  password String
+  role     String @default("subscriber")
+
+  @@map("users")
+}

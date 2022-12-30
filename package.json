@@ -1,0 +1,16 @@
+{
+  "name": "blog",
+  "version": "0.4.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markoni10/blog.git"
+  },
+  "author": "Marko Nikolaš",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/markoni10/blog/issues"
+  },
+  "homepage": "https://github.com/markoni10/blog#readme"
+}
