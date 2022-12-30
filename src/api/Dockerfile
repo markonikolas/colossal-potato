@@ -1,33 +1,29 @@
-FROM node:lts-slim as api
+FROM node:alpine as api
 
 WORKDIR /api
 
-COPY --chown=1000:1000 . .
+COPY . .
 
-COPY --chown=1000:1000 package.json package-lock.json ./
+RUN apk --no-cache add curl
 
-RUN apt update && \
-    apt install build-essential -y
+RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
 
-RUN npm i --location=global nodemon
-
-RUN npm ci
+RUN ["pnpm", "install"]
 
 EXPOSE 5000
 
-ENTRYPOINT [ "npm", "run", "dev" ]
+ENTRYPOINT [ "pnpm", "run", "dev" ]
 
-FROM node:lts-slim as prisma
+FROM node:alpine as prisma
 
-WORKDIR /api/src/
+WORKDIR /prisma
 
-COPY --chown=1000:1000 ./src/prisma .
+COPY /src/prisma .
 
-RUN apt update && \
-    apt install build-essential -y
+RUN apk add --no-cache libc6-compat openssl curl
+
+RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
 
 EXPOSE 5555
 
-RUN ["npm", "init", "-y"]
-
-ENTRYPOINT ["npx", "prisma", "studio"]
+ENTRYPOINT ["pnpm", "dlx", "prisma", "studio"]

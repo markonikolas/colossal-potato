@@ -1,15 +1,15 @@
-FROM node:lts-slim
+FROM node:alpine
 
 WORKDIR /client
 
-COPY --chown=1000:1000 . /client
+COPY . .
 
-COPY --chown=1000:1000 package.json package-lock.json /client/
+RUN apk --no-cache add curl
 
-RUN npm ci
+RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
 
-RUN chown 1000.1000 -R node_modules
+RUN ["pnpm", "install"]
 
 EXPOSE 3000
 
-ENTRYPOINT [ "npm", "start" ]
+ENTRYPOINT [ "pnpm", "start" ]
