@@ -1,6 +1,8 @@
 import { BlogPostProps } from './types';
 
-function BlogPost({item: {title, excerpt, img}}: BlogPostProps) {
+function BlogPost({ item }: BlogPostProps) {
+	const { title, excerpt, img } = item;
+
 	return (
 		<article className='min-w-full max-w-md mx-auto mt-4 shadow-md rounded-md duration-300 hover:shadow-xl cursor-pointer'>
 			<a href='/'>
