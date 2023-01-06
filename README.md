@@ -69,7 +69,7 @@ pnpm run db:push # sync the schema
 pnpm run db:seed # seed the database
 ```
 
-In this project four services communicate with each other: client, api, rest and the database.
+In this project four services communicate with each other: client, api, redis and the database.
 Also, there is prisma studio container.
 
 client -> [localhost:3000](localhost:3000)
