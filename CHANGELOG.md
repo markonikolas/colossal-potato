@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- Add ES384 algorithm for signing and verifying jwt tokens
+
+### Removed
+
+- Remove default HS256 algorithm for signing and verifying jwt tokens
+
 ## [0.4.0] - 2022-09-02
 
 ### Added
