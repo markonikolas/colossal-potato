@@ -10,10 +10,12 @@
   },
   "scripts": {
     "dev": "nodemon",
-    "prisma-generate": "prisma generate",
-    "prisma-migrate": "prisma migrate dev",
-    "prisma-studio": "prisma studio",
-    "prisma-seed": "prisma db seed"
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:pull": "prisma db pull",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio"
   },
   "author": "",
   "license": "ISC",

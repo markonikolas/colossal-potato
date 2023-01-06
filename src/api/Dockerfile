@@ -2,28 +2,32 @@ FROM node:alpine as api
 
 WORKDIR /api
 
-COPY . .
+COPY package.json pnpm-lock.yaml ./
 
 RUN apk --no-cache add curl
 
 RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
 
-RUN ["pnpm", "install"]
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install && pnpm store prune 
 
 EXPOSE 5000
 
-ENTRYPOINT [ "pnpm", "run", "dev" ]
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD ["pnpm", "run", "dev"]
 
 FROM node:alpine as prisma
 
+RUN apk --no-cache add curl
+
 WORKDIR /prisma
 
-COPY /src/prisma .
-
-RUN apk add --no-cache libc6-compat openssl curl
+COPY /src/prisma/schema.prisma .
 
 RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
 
 EXPOSE 5555
 
-ENTRYPOINT ["pnpm", "dlx", "prisma", "studio"]
+CMD ["pnpm", "dlx", "prisma", "studio"]

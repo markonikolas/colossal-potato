@@ -142,7 +142,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/n1c01ash/Projects/blog/src/api/src/prisma",
+      "value": "/api/src/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -151,7 +151,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x"
+        "value": "linux-musl-openssl-3.0.x"
       },
       {
         "fromEnvVar": null,
@@ -170,7 +170,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": ".env",
+    "rootEnvPath": null,
     "schemaEnvPath": ".env"
   },
   "relativePath": "",
@@ -199,16 +199,13 @@ const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
-path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
-path.join(process.cwd(), "src/prisma/libquery_engine-debian-openssl-3.0.x.so.node")
+path.join(__dirname, "libquery_engine-linux-musl-openssl-3.0.x.so.node");
+path.join(process.cwd(), "src/prisma/libquery_engine-linux-musl-openssl-3.0.x.so.node")
 
 path.join(__dirname, "libquery_engine-linux-musl.so.node");
 path.join(process.cwd(), "src/prisma/libquery_engine-linux-musl.so.node")
 
 path.join(__dirname, "libquery_engine-debian-openssl-1.1.x.so.node");
 path.join(process.cwd(), "src/prisma/libquery_engine-debian-openssl-1.1.x.so.node")
-
-path.join(__dirname, "libquery_engine-linux-musl-openssl-3.0.x.so.node");
-path.join(process.cwd(), "src/prisma/libquery_engine-linux-musl-openssl-3.0.x.so.node")
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "src/prisma/schema.prisma")

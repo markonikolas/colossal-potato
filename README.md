@@ -2,7 +2,7 @@
 
 ## Prerequisite
 
-You will need to install Docker, docker-compose & node in order to run this project
+You will need to install Docker, docker-compose / Docker Compose plugin & node in order to run this project
 
 ## Starting the project
 
@@ -12,49 +12,54 @@ Add env variables in root of the project so docker can set the database correctl
 
 ```bash
 MYSQL_DATABASE=blog
-MYSQL_USER=username
-MYSQL_PASSWORD=password
-MYSQL_HOST=db
-MYSQL_ROOT_PASSWORD=rootpassword
-```
+MYSQL_USER=blog
+MYSQL_PASSWORD=blog
+MYSQL_HOST=localhost
+MYSQL_ROOT_PASSWORD=blogroot
 
-Add env variable DATABASE_URL in the prisma folder so prisma could connect
+DATABASE_URL=mysql://blog:blog@localhost:3306/blog
 
-```bash
-touch src/api/src/prisma/.env
-```
+REDIS_HOST=redis 
+REDIS_PASSWORD=redis
+REDIS_PORT=6379
 
-Add env in this format
-
-```bash
-DATABASE_URL=mysql://username:password@db:3306/blog
+JWT_ACCESS_TOKEN_SECRET='generated password'
+JWT_REFRESH_TOKEN_SECRET='generated password'
 ```
 
 ### Docker
 
-Build the images
-
-```bash
-docker-compose build
-```
-
-Generate prisma dependencies
-
-```bash
-cd src/api/src
-npm run prisma-generate
-```
-
 Start the project
 
 ```bash
-docker-compose up
+docker-compose up --build
 ```
 
-In this project four services communicate with each other: client, api, phpmyadmin and the database.
+or
 
-client -> [localhost:3000](localhost:3000) api -> [localhost:5000](localhost:5000) phpmyadmin -> [localhost:8000](localhost:8000) db -> localhost:3306
+```bash
+docker compose up --build
+```
 
-API has some routes you should know about:
+Next, you'll need to sync schema with db container
 
-Home: / Get posts: /posts
+```bash
+docker compose exec api /bin/sh
+```
+
+then inside the api container
+
+```bash
+pnpm run db:push # sync the schema
+
+pnpm run db:seed # seed the database
+```
+
+In this project four services communicate with each other: client, api, rest and the database.
+Also, there is prisma studio container.
+
+client -> [localhost:3000](localhost:3000)
+api -> [localhost:5000](localhost:5000)
+prisma-studio -> [localhost:5555](localhost:5555)
+redis -> localhost:6379
+db -> localhost:3306

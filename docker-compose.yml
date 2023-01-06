@@ -7,12 +7,11 @@ services:
       context: src/client
     ports:
       - 3000:3000
-    expose:
-      - 3000
     volumes:
       - ./src/client:/client
-      - ./src/client/public:/client/public
-      - node_modules_client:/client/node_modules
+      - ./src/client/package.json:/client/package.json
+      - ./src/client/pnpm-lock.yaml:/client/pnpm-lock.yaml
+      - notused_client:/client/node_modules
 
   api:
     depends_on:
@@ -29,8 +28,9 @@ services:
       - 5000:5000
     volumes:
       - ./src/api:/api
-      - ./src/client/public:/client/public
-      - node_modules_api:/api/node_modules
+      - ./src/api/package.json:/api/package.json
+      - ./src/api/pnpm-lock.yaml:/api/pnpm-lock.yaml
+      - notused_api:/api/node_modules
 
   db:
     image: mariadb:10.8
@@ -39,8 +39,10 @@ services:
       - db:/var/lib/mysql
     ports:
     - 3306:3306
-  
+
   prisma:
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
     build:
       context: src/api
       target: prisma
@@ -49,20 +51,18 @@ services:
       - ./src/api/src/prisma:/api/src/prisma
     ports:
       - 5555:5555
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
 
   redis:
-    image: redis
+    image: redis:7-alpine
     restart: always
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD} 
     volumes: 
       - redis:/data
-  
+
 volumes:
   db:
-  node_modules_api:
-  node_modules_client:
   redis:
+  notused_client:
+  notused_api:
