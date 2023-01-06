@@ -9,8 +9,6 @@ services:
       - 3000:3000
     volumes:
       - ./src/client:/client
-      - ./src/client/package.json:/client/package.json
-      - ./src/client/pnpm-lock.yaml:/client/pnpm-lock.yaml
       - notused_client:/client/node_modules
 
   api:
@@ -28,8 +26,6 @@ services:
       - 5000:5000
     volumes:
       - ./src/api:/api
-      - ./src/api/package.json:/api/package.json
-      - ./src/api/pnpm-lock.yaml:/api/pnpm-lock.yaml
       - notused_api:/api/node_modules
 
   db:
