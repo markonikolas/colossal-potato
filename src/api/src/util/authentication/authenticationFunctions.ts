@@ -1,11 +1,11 @@
-import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+import bcrypt from "bcrypt";
+import jwt, { SignOptions } from 'jsonwebtoken';
 
 import HTTP_STATUS from '../../enum/HttpStatus';
 import { isCredentialEmpty } from '../validation/fields';
+import { ACCESS, REFRESH } from './keys';
 
-const { JWT_ACCESS_TOKEN_SECRET, JWT_REFRESH_TOKEN_SECRET } = process.env;
 const isSecretEmpty = isCredentialEmpty(HTTP_STATUS.BAD_REQUEST);
 const throwErrorIfSecretEmpty = isSecretEmpty('Secret');
 
@@ -16,7 +16,7 @@ export const generatePasswordHash = (password: string) => {
     return password_hash;
 }
 
-export const comparePasswords = async (passwordHash: string, plainTextPassword: string) => {
+export const comparePasswordHash = async (passwordHash: string, plainTextPassword: string) => {
     const isPasswordEmpty = isCredentialEmpty(HTTP_STATUS.BAD_REQUEST);
     const throwErrorIfPasswordEmpty = isPasswordEmpty('Password');
 
@@ -25,21 +25,26 @@ export const comparePasswords = async (passwordHash: string, plainTextPassword: 
     return await bcrypt.compare(plainTextPassword, passwordHash);
 }
 
-export const generateToken = (JWT_SECRET: string) => async (username: string, opts?: Object) => {
-    throwErrorIfSecretEmpty(JWT_SECRET);
+export const generateToken = (secretOrKey: string | Buffer, options?: SignOptions) => async (username: string, additionalOpts?: SignOptions) => {
+    throwErrorIfSecretEmpty(secretOrKey);
 
-    const token = jwt.sign({ username }, JWT_SECRET, opts);
+    const token = jwt.sign({ username }, secretOrKey, Object.assign({}, options, additionalOpts));
 
     return token;
 }
 
-export const authenticateToken = (JWT_SECRET: string) => async (token: string) => {
-    throwErrorIfSecretEmpty(JWT_SECRET);
+export const authenticateToken = (secretOrKey: string | Buffer, options?: SignOptions) => async (token: string) => {
+    throwErrorIfSecretEmpty(secretOrKey);
 
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, secretOrKey, options);
 }
 
-export const generateAccessToken = generateToken(JWT_ACCESS_TOKEN_SECRET!);
-export const generateRefreshToken = generateToken(JWT_REFRESH_TOKEN_SECRET!);
-export const authenticateAccessToken = authenticateToken(JWT_ACCESS_TOKEN_SECRET!);
-export const authenticateRefreshToken = authenticateToken(JWT_ACCESS_TOKEN_SECRET!);
+const generateES384AccessToken = generateToken(ACCESS.PRIVATE, { algorithm: 'ES384' });
+const generateES384RefreshToken = generateToken(REFRESH.PRIVATE, { algorithm: 'ES384' });
+const authenticateES384AccessToken = authenticateToken(ACCESS.PUBLIC, { algorithm: 'ES384' })
+const authenticateES384RefreshToken = authenticateToken(REFRESH.PUBLIC, { algorithm: 'ES384' })
+
+export const generateAccessToken = generateES384AccessToken;
+export const generateRefreshToken = generateES384RefreshToken;
+export const authenticateAccessToken = authenticateES384AccessToken;
+export const authenticateRefreshToken = authenticateES384RefreshToken;

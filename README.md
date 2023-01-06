@@ -22,9 +22,23 @@ DATABASE_URL=mysql://blog:blog@localhost:3306/blog
 REDIS_HOST=redis 
 REDIS_PASSWORD=redis
 REDIS_PORT=6379
+```
 
-JWT_ACCESS_TOKEN_SECRET='generated password'
-JWT_REFRESH_TOKEN_SECRET='generated password'
+Since we're using elliptic curve algorithm (ES384) instead of default HS256 for signing and verifying tokens, you'll need to generate two private / public key pairs for access and refresh tokens in
+`/api/src/keys`.
+
+private keys:
+
+```bash
+openssl ecparam -name secp384r1 -genkey -noout -out private-a.key
+openssl ecparam -name secp384r1 -genkey -noout -out private-a.key
+```
+
+public keys:
+
+```bash
+openssl ec -in private-a.key -pubout -out public-a.pem
+openssl ec -in private-r.key -pubout -out public-r.pem
 ```
 
 ### Docker

@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 
 import HTTP_STATUS from '../enum/HttpStatus';
 import ExtError from '../util/errors/ExtError';
-import { authenticateRefreshToken, comparePasswords, generateAccessToken, generateRefreshToken } from '../util/authentication/authenticationFunctions';
+import { authenticateRefreshToken, comparePasswordHash, generateAccessToken, generateRefreshToken } from '../util/authentication/authenticationFunctions';
 import { generateUserPassword } from '../services/UserService';
 import { isCredentialEmpty } from '../util/validation/fields';
 
@@ -15,7 +15,7 @@ const validateUserPassword = (userID: number) => {
         const { username } = await userRepository.getUserById(userID);
         const password = await userRepository.getUserPassword(username);
 
-        return await comparePasswords(password, passwordHash);
+        return await comparePasswordHash(password, passwordHash);
     }
 }
 
