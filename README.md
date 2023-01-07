@@ -17,7 +17,7 @@ MYSQL_PASSWORD=blog
 MYSQL_HOST=localhost
 MYSQL_ROOT_PASSWORD=blogroot
 
-DATABASE_URL=mysql://blog:blog@localhost:3306/blog
+DATABASE_URL=mysql://blog:blog@db:3306/blog
 
 REDIS_HOST=redis 
 REDIS_PASSWORD=redis
