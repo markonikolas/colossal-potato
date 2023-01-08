@@ -4,7 +4,7 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 
 import HTTP_STATUS from '../../enum/HttpStatus';
 import { isCredentialEmpty } from '../validation/fields';
-import { ACCESS, REFRESH } from './keys';
+import { ACCESS, REFRESH } from '../../config/keys';
 
 const isSecretEmpty = isCredentialEmpty(HTTP_STATUS.BAD_REQUEST);
 const throwErrorIfSecretEmpty = isSecretEmpty('Secret');
