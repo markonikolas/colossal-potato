@@ -37,6 +37,7 @@ services:
     - 3306:3306
 
   prisma:
+    restart: always
     environment:
       DATABASE_URL: ${DATABASE_URL}
     build:

@@ -2,13 +2,9 @@ FROM node:alpine as api
 
 WORKDIR /api
 
-COPY package.json pnpm-lock.yaml ./
+COPY --chown=node:node package.json pnpm-lock.yaml ./
 
-RUN apk --no-cache add curl
-
-RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
-
-COPY package.json pnpm-lock.yaml ./
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 RUN pnpm install && pnpm store prune 
 
@@ -24,9 +20,9 @@ RUN apk --no-cache add curl
 
 WORKDIR /prisma
 
-COPY /src/prisma/schema.prisma .
+COPY /src/prisma/* .
 
-RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 EXPOSE 5555
 
