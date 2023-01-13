@@ -1,5 +1,6 @@
 # modules
 node_modules
+.pnpm-store
 
 # secrets
 .env
