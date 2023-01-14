@@ -77,3 +77,57 @@ api -> [localhost:5000](localhost:5000)
 prisma-studio -> [localhost:5555](localhost:5555)
 redis -> localhost:6379
 db -> localhost:3306
+
+### Connecting authentication services
+
+Since this api is using two services for storing hashed passwords and corresponding salts,
+we need to add this container, hashes and salts api to the same network in development mode.
+
+In production environment, both services will (preferably) be on separate host networks behind a firewall and accessed only through `colossal-potato`.
+
+Clone <https://github.com/markonikolas/colossal-needle> into two separate folders
+
+start the services with:
+
+add `.env` file:
+
+```.env
+MYSQL_DATABASE=app
+MYSQL_USER=app
+MYSQL_PASSWORD=app
+MYSQL_HOST=db
+MYSQL_ROOT_PASSWORD=root
+MYSQL_TCP_PORT=3308 <-- make sure this doesn't clash
+
+APP_PORT=5002 <-- this as well
+APP_NAME=ProjectName
+```
+
+`docker compose up --build #for each service`
+
+Next, add api, hash and salt APIs to the same
+docker network. This is a must if we want to send
+requests from main api to other containers.
+
+Create shared network
+
+```bash
+docker network create <network-name>
+```
+
+do this only for the main API
+
+```bash
+docker network connect <network-name> <container-name>
+```
+
+for other two add aliases so we can reference it later
+in the request
+
+```bash
+docker network connect --alias <domain-name> shared <container-name> 
+```
+
+Here is the rough schema:
+
+![Screenshot](schema.png)
