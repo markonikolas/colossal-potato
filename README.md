@@ -97,9 +97,9 @@ MYSQL_USER=app
 MYSQL_PASSWORD=app
 MYSQL_HOST=db
 MYSQL_ROOT_PASSWORD=root
-MYSQL_TCP_PORT=3308 <-- make sure this doesn't clash
+MYSQL_TCP_PORT=3308 # make sure this doesn't clash with the other container
 
-APP_PORT=5002 <-- this as well
+APP_PORT=5002 # this as well
 APP_NAME=ProjectName
 ```
 
