@@ -26,8 +26,7 @@ export const deleteUser = async (id: number) => {
 }
 
 export const updateUser = async (id: number, data: IUserType) => {
-    const { password } = data;
-    const protectedData = { ...data, password: generateUserPassword(password) }
+    const protectedData = { ...data, password: generateUserPassword(data.password) }
 
     return await userRepository.updateUser(id, protectedData);
 }
