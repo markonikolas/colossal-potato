@@ -43,3 +43,13 @@ export const refresh = async (req: Request, res: Response) => {
         processError(error, res);
     }
 }
+
+export const availability = async (req: Request, res: Response) => {
+    try {
+        const result = await authService.availability();
+
+        res.send(result);
+    } catch (error) {
+        processError(error, res);
+    }
+}

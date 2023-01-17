@@ -4,11 +4,12 @@ import dayjs from 'dayjs';
 import HTTP_STATUS from '../enum/HttpStatus';
 import ExtError from '../util/errors/ExtError';
 import { authenticateRefreshToken, comparePasswordHash, generateAccessToken, generateRefreshToken } from '../util/authentication/authenticationFunctions';
-import { generateUserPassword } from '../services/UserService';
+import { generateUserPassword } from './UserService';
 import { isCredentialEmpty } from '../util/validation/fields';
 
 import * as userRepository from "../repository/UserRepository";
-import * as redisService from '../services/RedisService';
+import * as redisService from './RedisService';
+import * as tokenService from './AvailabilityService';
 
 const validateUserPassword = (userID: number) => {
     return async (passwordHash: string) => {
@@ -125,4 +126,14 @@ export const serveRefreshTokenAsCookie = async (res: Response, refreshToken: str
         httpOnly: true,
         expires: dayjs().add(7, "days").toDate()
     });
+}
+
+export const availability = async () => {
+    const hashes = await tokenService.isHashingServiceAlive();
+    const salts = await tokenService.isSaltingServiceAlive();
+
+    return {
+        hashes: hashes.data,
+        salts: salts.data
+    }
 }
