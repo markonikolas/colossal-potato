@@ -10,6 +10,8 @@ services:
     volumes:
       - ./src/client:/client
       - notused_client:/client/node_modules
+    networks:
+      internal:
 
   api:
     depends_on:
@@ -27,6 +29,9 @@ services:
     volumes:
       - ./src/api:/api
       - notused_api:/api/node_modules
+    networks:
+      internal:
+      shared:
 
   db:
     image: mariadb:10.8
@@ -35,6 +40,8 @@ services:
       - db:/var/lib/mysql
     ports:
     - 3306:3306
+    networks:
+      internal:
 
   prisma:
     restart: always
@@ -48,6 +55,8 @@ services:
       - ./src/api/src/prisma:/api/src/prisma
     ports:
       - 5555:5555
+    networks:
+      internal:
 
   redis:
     image: redis:7-alpine
@@ -57,9 +66,16 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD} 
     volumes: 
       - redis:/data
+    networks:
+      internal:
 
 volumes:
   db:
   redis:
   notused_client:
   notused_api:
+
+networks:
+  internal:
+  shared:
+    name: shared
