@@ -45,3 +45,16 @@ export const deletePost = async (req: Request, res: Response) => {
         processError(error, res);
     }
 }
+
+export const updatePost = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { title, content, img, author_id } = req.body;
+
+        const result = await PostService.updatePost(~~id, { title, content, img, author_id });
+
+        res.send(result)
+    } catch (error) {
+        processError(error, res);
+    }
+}
