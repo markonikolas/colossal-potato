@@ -6,7 +6,7 @@ import HTTP_STATUS from '../enum/HttpStatus.js';
 import { IUserSigninDetails, IUserType } from '../types/user';
 
 const prisma = new PrismaClient();
-const prismaUser = prisma.user;
+const users = prisma.user;
 
 function exclude<User, Key extends keyof User>(
     user: User,
@@ -19,13 +19,13 @@ function exclude<User, Key extends keyof User>(
 }
 
 export const getAllUsers = async () => {
-    const users = await prismaUser.findMany();
+    const allUsers = await users.findMany();
 
-    return users.map(user => exclude(user, 'password'));
+    return allUsers.map(user => exclude(user, 'password'));
 }
 
 export const getUserById = async (id: number) => {
-    const user = await prismaUser.findUnique({
+    const user = await users.findUnique({
         where: {
             id
         },
@@ -38,7 +38,7 @@ export const getUserById = async (id: number) => {
 }
 
 export const getUserByEmail = async (email: string) => {
-    const user = await prismaUser.findUnique({
+    const user = await users.findUnique({
         where: {
             email
         }
@@ -49,12 +49,12 @@ export const getUserByEmail = async (email: string) => {
     }
 }
 
-const checkIfTaken = (id: number) => async (type: string, field: string) => {
+const checkIfTaken = (userId: number) => async (type: string, field: string) => {
     const where = {
         NOT: [
             {
                 id: {
-                    equals: id
+                    equals: userId
                 }
 
             }
@@ -68,13 +68,13 @@ const checkIfTaken = (id: number) => async (type: string, field: string) => {
         ]
     }
 
-    const fieldTaken = await prismaUser.findMany({ where });
+    const fieldTaken = await users.findMany({ where });
 
     return !!fieldTaken.length;
 }
 
 export const getUserByUsername = async (username: string) => {
-    const user = await prismaUser.findUnique({
+    const user = await users.findUnique({
         where: {
             username
         }
@@ -86,16 +86,16 @@ export const getUserByUsername = async (username: string) => {
 }
 
 export const createUser = async (data: IUserSigninDetails) => {
-    const userEmailExists = await getUserByEmail(data.email);
-    const userUsernameExists = await getUserByUsername(data.username);
+    const { email, username } = data;
+    const emailExists = await getUserByEmail(email);
+    const usernameExists = await getUserByUsername(username);
+    const user = await users.create({ data })
 
-    if (userEmailExists)
+    if (emailExists)
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, "The user with the given email already exists.");
 
-    if (userUsernameExists)
+    if (usernameExists)
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, "The user with the given username already exists.");
-
-    const user = await prismaUser.create({ data })
 
     if (!user)
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, "The data you provided is invalid.");
@@ -104,12 +104,12 @@ export const createUser = async (data: IUserSigninDetails) => {
 }
 
 export const deleteUser = async (id: number) => {
-    const userFound = await getUserById(id);
+    const userExists = await getUserById(id);
 
-    if (!userFound)
+    if (!userExists)
         throw new ExtError(HTTP_STATUS.NOT_FOUND, "User with the given ID was not found.");
 
-    const user = await prismaUser.delete({
+    const user = await users.delete({
         where: {
             id
         }
@@ -121,24 +121,24 @@ export const deleteUser = async (id: number) => {
 }
 
 export const updateUser = async (id: number, data: IUserType) => {
-    const userFound = await getUserById(id);
+    const { username, email } = data;
+    const userExists = await getUserById(id);
+    const checkIfFieldTaken = checkIfTaken(id);
+    const isEmailTaken = await checkIfFieldTaken('email', email);
+    const isUsernameTaken = await checkIfFieldTaken('username', username);
 
-    if (!userFound)
+    if (!userExists)
         throw new ExtError(HTTP_STATUS.NOT_FOUND, "User with the given ID was not found.");
 
-    const checkIfFieldTaken = checkIfTaken(id);
-    const emailTaken = await checkIfFieldTaken('email', data.email);
-    const usernameTaken = await checkIfFieldTaken('username', data.username);
-
-    if (emailTaken) {
+    if (isEmailTaken) {
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, 'The given email address is already in use.');
     }
 
-    if (usernameTaken) {
+    if (isUsernameTaken) {
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, 'The given username is already in use.');
     }
 
-    const user = await prismaUser.update({
+    const user = await users.update({
         where: {
             id
         },
@@ -151,7 +151,7 @@ export const updateUser = async (id: number, data: IUserType) => {
 }
 
 export const getUserPassword = async (username: string) => {
-    const user = await prismaUser.findUnique({
+    const user = await users.findUnique({
         where: {
             username
         }
