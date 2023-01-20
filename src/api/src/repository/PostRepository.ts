@@ -68,8 +68,6 @@ export const updatePost = async (id: number, data: PostType) => {
 		throw new ExtError(HTTP_STATUS.NOT_FOUND, 'Post with the given ID was not found.');
 	}
 
-	console.log(data)
-
 	const post = await postsTable.update({
 		where: {
 			id,
