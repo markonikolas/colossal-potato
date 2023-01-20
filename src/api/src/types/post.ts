@@ -1,4 +1,4 @@
-export type PostType = {
+export interface ICreatePostDto {
     title: string,
     content: string,
     img: string,

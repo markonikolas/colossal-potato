@@ -16,8 +16,8 @@ export const getAllPosts = async (req: Request, res: Response) => {
 
 export const getPostById = async (req: Request, res: Response) => {
     try {
-        const postID = parseInt(req.params.id);
-        const result = await PostService.getPostById(postID);
+        const { id } = req.params;
+        const result = await PostService.getPostById(~~id);
 
         res.send(result);
     } catch (error) {
@@ -37,8 +37,8 @@ export const createPost = async (req: Request, res: Response) => {
 
 export const deletePost = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        const result = await PostService.deletePost(id);
+        const { id } = req.params;
+        const result = await PostService.deletePost(~~id);
 
         res.send(result)
     } catch (error) {

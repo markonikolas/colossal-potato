@@ -3,19 +3,15 @@ import ExtError from '../util/errors/ExtError';
 
 import HTTP_STATUS from '../enum/HttpStatus';
 
-import { PostType } from '../types/post';
+import { ICreatePostDto } from '../types/post';
 
 const prisma = new PrismaClient();
-const postsTable = prisma.post;
+const posts = prisma.post;
 
-export const getAllPosts = async () => {
-	const posts = await postsTable.findMany();
-
-	return posts;
-};
+export const getAllPosts = async () => await posts.findMany();
 
 export const getPostById = async (id: number) => {
-	const post = await postsTable.findUnique({
+	const post = await posts.findUnique({
 		where: {
 			id,
 		},
@@ -28,15 +24,9 @@ export const getPostById = async (id: number) => {
 	return post;
 };
 
-export const createPost = async ({ title, content, img, author_id }: PostType) => {
-	const post = await postsTable.create({
-		data: {
-			title,
-			content,
-			img,
-			author_id,
-		},
-	});
+export const createPost = async (data: ICreatePostDto) => {
+
+	const post = await posts.create({ data });
 
 	if (!post) {
 		throw new ExtError(HTTP_STATUS.BAD_REQUEST, 'An error occured, post body not valid.');
@@ -52,7 +42,7 @@ export const deletePost = async (id: number) => {
 		throw new ExtError(HTTP_STATUS.NOT_FOUND, 'Post with the given ID was not found.');
 	}
 
-	const post = await postsTable.delete({
+	const post = await posts.delete({
 		where: {
 			id,
 		},
@@ -61,14 +51,14 @@ export const deletePost = async (id: number) => {
 	return post;
 };
 
-export const updatePost = async (id: number, data: PostType) => {
+export const updatePost = async (id: number, data: ICreatePostDto) => {
 	const postExists = await getPostById(id);
 
 	if (!postExists) {
 		throw new ExtError(HTTP_STATUS.NOT_FOUND, 'Post with the given ID was not found.');
 	}
 
-	const post = await postsTable.update({
+	const post = await posts.update({
 		where: {
 			id,
 		},
