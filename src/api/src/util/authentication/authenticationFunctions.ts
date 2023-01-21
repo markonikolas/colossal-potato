@@ -5,24 +5,27 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 import HTTP_STATUS from '../../enum/HttpStatus';
 import { isCredentialEmpty } from '../validation/fields';
 import { ACCESS, REFRESH } from '../../config/keys';
+import ExtError from '../errors/ExtError';
 
 const isSecretEmpty = isCredentialEmpty(HTTP_STATUS.BAD_REQUEST);
 const throwErrorIfSecretEmpty = isSecretEmpty('Secret');
 
-export const generatePasswordHash = (password: string) => {
-    const password_salt = bcrypt.genSaltSync();
-    const password_hash = bcrypt.hashSync(password, password_salt);
-    
-    return password_hash;
+export const validateUserPassword = async (password: string, savedHash: string, salt: string) => {
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    const isPasswordValid = passwordHash === savedHash;
+
+    if (!isPasswordValid) {
+        throw new ExtError(HTTP_STATUS.UNAUTHORIZED, 'The provided password is invalid.');
+    }
+
+    return passwordHash;
 }
 
-export const comparePasswordHash = async (passwordHash: string, plainTextPassword: string) => {
-    const isPasswordEmpty = isCredentialEmpty(HTTP_STATUS.BAD_REQUEST);
-    const throwErrorIfPasswordEmpty = isPasswordEmpty('Password');
+export const generateUserPassword = (password: string, salt: string) => {
+    const passwordHash = bcrypt.hashSync(password, salt);
 
-    throwErrorIfPasswordEmpty(plainTextPassword);
-
-    return await bcrypt.compare(plainTextPassword, passwordHash);
+    return passwordHash;
 }
 
 export const generateToken = (secretOrKey: string | Buffer, options?: SignOptions) => async (username: string, additionalOpts?: SignOptions) => {

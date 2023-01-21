@@ -12,4 +12,9 @@ export interface IUserSigninDetails {
     password: string
 }
 
+export interface ICreateUserDto {
+    username: string,
+    email: string,
+}
+
 export type IUserType = IUserID & IUserRole & IUserSigninDetails;

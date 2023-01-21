@@ -3,7 +3,7 @@ import { PrismaClient } from '../prisma';
 import ExtError from '../util/errors/ExtError';
 import HTTP_STATUS from '../enum/HttpStatus.js';
 
-import { IUserSigninDetails, IUserType } from '../types/user';
+import { ICreateUserDto, IUserType } from '../types/user';
 
 const prisma = new PrismaClient();
 const users = prisma.user;
@@ -21,7 +21,7 @@ function exclude<User, Key extends keyof User>(
 export const getAllUsers = async () => {
     const allUsers = await users.findMany();
 
-    return allUsers.map(user => exclude(user, 'password'));
+    return allUsers;
 }
 
 export const getUserById = async (id: number) => {
@@ -34,7 +34,7 @@ export const getUserById = async (id: number) => {
     if (!user)
         throw new ExtError(HTTP_STATUS.NOT_FOUND, "User with the given ID was not found.");
 
-    return exclude(user, 'password');
+    return user;
 }
 
 export const getUserByEmail = async (email: string) => {
@@ -45,7 +45,7 @@ export const getUserByEmail = async (email: string) => {
     });
 
     if (user) {
-        return exclude(user, 'password');
+        return user;
     }
 }
 
@@ -81,15 +81,14 @@ export const getUserByUsername = async (username: string) => {
     });
 
     if (user) {
-        return exclude(user, 'password');
+        return user;
     }
 }
 
-export const createUser = async (data: IUserSigninDetails) => {
+export const createUser = async (data: ICreateUserDto) => {
     const { email, username } = data;
     const emailExists = await getUserByEmail(email);
     const usernameExists = await getUserByUsername(username);
-    const user = await users.create({ data })
 
     if (emailExists)
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, "The user with the given email already exists.");
@@ -97,10 +96,12 @@ export const createUser = async (data: IUserSigninDetails) => {
     if (usernameExists)
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, "The user with the given username already exists.");
 
+    const user = await users.create({ data });
+
     if (!user)
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, "The data you provided is invalid.");
 
-    return exclude(user, 'password');
+    return user;
 }
 
 export const deleteUser = async (id: number) => {
@@ -116,7 +117,7 @@ export const deleteUser = async (id: number) => {
     })
 
     if (user) {
-        return exclude(user, 'password');
+        return user;
     }
 }
 
@@ -146,16 +147,6 @@ export const updateUser = async (id: number, data: IUserType) => {
     })
 
     if (user) {
-        return exclude(user, 'password');
+        return user;
     }
-}
-
-export const getUserPassword = async (username: string) => {
-    const user = await users.findUnique({
-        where: {
-            username
-        }
-    });
-
-    return user?.password!;
 }

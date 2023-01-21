@@ -1,33 +1,26 @@
 import { Request, Response } from 'express';
 import dayjs from 'dayjs';
+import bcrypt from 'bcrypt';
 
 import HTTP_STATUS from '../enum/HttpStatus';
 import ExtError from '../util/errors/ExtError';
 import { isCredentialEmpty } from '../util/validation/fields';
 import {
-    comparePasswordHash,
-    generatePasswordHash,
+    validateUserPassword,
+    generateUserPassword,
     authenticateRefreshToken,
     generateAccessToken,
     generateRefreshToken
 } from '../util/authentication/authenticationFunctions';
 
 import * as redisService from './RedisService';
-
+import * as hashesService from '../http/services/hashesService';
+import * as saltsService from '../http/services/saltsService';
 import * as userRepository from "../repository/UserRepository";
 
-const validateUserPassword = (userID: number) => {
-    return async (passwordHash: string) => {
-        const { username } = await userRepository.getUserById(userID);
-        const password = await userRepository.getUserPassword(username);
-
-        return await comparePasswordHash(password, passwordHash);
-    }
-}
-
 export const signin = async (req: Request, res: Response) => {
-    const body = req.body;
-    const { username, password } = body;
+    const { username, password } = req.body;
+    const user = await userRepository.getUserByUsername(username);
 
     const badRequestIfFieldEmpty = isCredentialEmpty(HTTP_STATUS.BAD_REQUEST);
     const throwErrorIfUsernameEmpty = badRequestIfFieldEmpty('Username');
@@ -36,17 +29,16 @@ export const signin = async (req: Request, res: Response) => {
     throwErrorIfUsernameEmpty(username);
     throwErrorIfPasswordEmpty(password);
 
-    const user = await userRepository.getUserByUsername(username);
-
     if (!user) {
         throw new ExtError(HTTP_STATUS.NOT_FOUND, 'The user with the given username doesn\'t exist.')
     }
 
-    const userID = user.id;
-    const validatePassword = validateUserPassword(userID);
-    const passwordValid = await validatePassword(password);
+    const hash = await hashesService.getHash(username);
+    const salt = await saltsService.getSalt(username);
 
-    if (!passwordValid) {
+    const isPasswordValid = validateUserPassword(password, hash, salt);
+
+    if (!isPasswordValid) {
         throw new ExtError(HTTP_STATUS.UNAUTHORIZED, 'The given password is invalid.')
     }
 
@@ -85,8 +77,13 @@ export const signup = async (req: Request, res: Response) => {
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, 'Username or email aready exists.');
     }
 
-    const passwordHash = generatePasswordHash(password);
-    const user = await userRepository.createUser({ username, email, password: passwordHash });
+    const passwordSalt = await bcrypt.genSalt();
+    const passwordHash = generateUserPassword(password, passwordSalt);
+
+    await hashesService.setHash(username, passwordHash);
+    await saltsService.setSalt(username, passwordSalt);
+
+    const user = await userRepository.createUser({ username, email });
 
     if (!user) {
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, 'An error occured during user creation.');
