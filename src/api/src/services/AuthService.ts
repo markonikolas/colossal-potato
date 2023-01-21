@@ -3,12 +3,19 @@ import dayjs from 'dayjs';
 
 import HTTP_STATUS from '../enum/HttpStatus';
 import ExtError from '../util/errors/ExtError';
-import { authenticateRefreshToken, comparePasswordHash, generateAccessToken, generatePasswordHash, generateRefreshToken } from '../util/authentication/authenticationFunctions';
 import { isCredentialEmpty } from '../util/validation/fields';
+import {
+    comparePasswordHash,
+    generatePasswordHash,
+    authenticateRefreshToken,
+    generateAccessToken,
+    generateRefreshToken
+} from '../util/authentication/authenticationFunctions';
 
-import * as userRepository from "../repository/UserRepository";
 import * as redisService from './RedisService';
 import * as tokenService from './AvailabilityService';
+
+import * as userRepository from "../repository/UserRepository";
 
 const validateUserPassword = (userID: number) => {
     return async (passwordHash: string) => {
