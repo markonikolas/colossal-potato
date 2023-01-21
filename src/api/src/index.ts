@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express, { json } from 'express';
 import cookieParser from 'cookie-parser';
+import bcrypt from 'bcrypt'
 import logger from 'morgan';
 import cors from 'cors';
 import session from 'express-session';
@@ -9,7 +10,7 @@ import postsRouter from './routes/PostRoutes';
 import usersRouter from './routes/UserRoutes';
 import authRouter from './routes/AuthRoutes';
 
-import { generatePasswordHash } from './util/authentication/authenticationFunctions';
+import { generateUserPassword } from './util/authentication/authenticationFunctions';
 
 declare module 'express-session' {
     export interface SessionData {
@@ -19,7 +20,7 @@ declare module 'express-session' {
 
 const app = express();
 
-const secretHash = generatePasswordHash('myawesomeblog');
+const secretHash = generateUserPassword('myawesomeblog', bcrypt.genSaltSync());
 
 app.use(session({
     secret: secretHash,
