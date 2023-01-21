@@ -32,7 +32,6 @@ export type User = {
   id: number
   username: string
   email: string
-  password: string
   role: string
 }
 
@@ -1820,7 +1819,6 @@ export namespace Prisma {
     id: number | null
     username: string | null
     email: string | null
-    password: string | null
     role: string | null
   }
 
@@ -1828,7 +1826,6 @@ export namespace Prisma {
     id: number | null
     username: string | null
     email: string | null
-    password: string | null
     role: string | null
   }
 
@@ -1836,7 +1833,6 @@ export namespace Prisma {
     id: number
     username: number
     email: number
-    password: number
     role: number
     _all: number
   }
@@ -1854,7 +1850,6 @@ export namespace Prisma {
     id?: true
     username?: true
     email?: true
-    password?: true
     role?: true
   }
 
@@ -1862,7 +1857,6 @@ export namespace Prisma {
     id?: true
     username?: true
     email?: true
-    password?: true
     role?: true
   }
 
@@ -1870,7 +1864,6 @@ export namespace Prisma {
     id?: true
     username?: true
     email?: true
-    password?: true
     role?: true
     _all?: true
   }
@@ -1971,7 +1964,6 @@ export namespace Prisma {
     id: number
     username: string
     email: string
-    password: string
     role: string
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
@@ -1998,7 +1990,6 @@ export namespace Prisma {
     id?: boolean
     username?: boolean
     email?: boolean
-    password?: boolean
     role?: boolean
   }
 
@@ -2798,7 +2789,6 @@ export namespace Prisma {
     id: 'id',
     username: 'username',
     email: 'email',
-    password: 'password',
     role: 'role'
   };
 
@@ -2864,7 +2854,6 @@ export namespace Prisma {
     id?: IntFilter | number
     username?: StringFilter | string
     email?: StringFilter | string
-    password?: StringFilter | string
     role?: StringFilter | string
   }
 
@@ -2872,7 +2861,6 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     email?: SortOrder
-    password?: SortOrder
     role?: SortOrder
   }
 
@@ -2886,7 +2874,6 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     email?: SortOrder
-    password?: SortOrder
     role?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
@@ -2902,7 +2889,6 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter | number
     username?: StringWithAggregatesFilter | string
     email?: StringWithAggregatesFilter | string
-    password?: StringWithAggregatesFilter | string
     role?: StringWithAggregatesFilter | string
   }
 
@@ -2962,7 +2948,6 @@ export namespace Prisma {
   export type UserCreateInput = {
     username: string
     email: string
-    password: string
     role?: string
   }
 
@@ -2970,14 +2955,12 @@ export namespace Prisma {
     id?: number
     username: string
     email: string
-    password: string
     role?: string
   }
 
   export type UserUpdateInput = {
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
   }
 
@@ -2985,7 +2968,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
   }
 
@@ -2993,14 +2975,12 @@ export namespace Prisma {
     id?: number
     username: string
     email: string
-    password: string
     role?: string
   }
 
   export type UserUpdateManyMutationInput = {
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
   }
 
@@ -3008,7 +2988,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
   }
 
@@ -3139,7 +3118,6 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     email?: SortOrder
-    password?: SortOrder
     role?: SortOrder
   }
 
@@ -3151,7 +3129,6 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     email?: SortOrder
-    password?: SortOrder
     role?: SortOrder
   }
 
@@ -3159,7 +3136,6 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     email?: SortOrder
-    password?: SortOrder
     role?: SortOrder
   }
 
