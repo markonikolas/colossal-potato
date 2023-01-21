@@ -13,7 +13,6 @@ import {
 } from '../util/authentication/authenticationFunctions';
 
 import * as redisService from './RedisService';
-import * as tokenService from './AvailabilityService';
 
 import * as userRepository from "../repository/UserRepository";
 
@@ -132,14 +131,4 @@ export const serveRefreshTokenAsCookie = async (res: Response, refreshToken: str
         httpOnly: true,
         expires: dayjs().add(7, "days").toDate()
     });
-}
-
-export const availability = async () => {
-    const hashes = await tokenService.isHashingServiceAlive();
-    const salts = await tokenService.isSaltingServiceAlive();
-
-    return {
-        hashes: hashes.data,
-        salts: salts.data
-    }
 }
