@@ -3,8 +3,7 @@ import dayjs from 'dayjs';
 
 import HTTP_STATUS from '../enum/HttpStatus';
 import ExtError from '../util/errors/ExtError';
-import { authenticateRefreshToken, comparePasswordHash, generateAccessToken, generateRefreshToken } from '../util/authentication/authenticationFunctions';
-import { generateUserPassword } from './UserService';
+import { authenticateRefreshToken, comparePasswordHash, generateAccessToken, generatePasswordHash, generateRefreshToken } from '../util/authentication/authenticationFunctions';
 import { isCredentialEmpty } from '../util/validation/fields';
 
 import * as userRepository from "../repository/UserRepository";
@@ -80,7 +79,7 @@ export const signup = async (req: Request, res: Response) => {
         throw new ExtError(HTTP_STATUS.BAD_REQUEST, 'Username or email aready exists.');
     }
 
-    const passwordHash = generateUserPassword(password);
+    const passwordHash = generatePasswordHash(password);
     const user = await userRepository.createUser({ username, email, password: passwordHash });
 
     if (!user) {

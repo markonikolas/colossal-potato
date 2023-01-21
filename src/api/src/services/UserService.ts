@@ -1,28 +1,28 @@
-import * as userRepository from "../repository/UserRepository";
 import { IUserSigninDetails, IUserType } from '../types/user';
-
 import { generatePasswordHash } from "../util/authentication/authenticationFunctions";
 
-export const getAllUsers = async () => await userRepository.getAllUsers();
+import * as userRepository from "../repository/UserRepository";
 
-export const getUserById = async (id: number) => await userRepository.getUserById(id);
+export const getAllUsers = async () => {
+    return await userRepository.getAllUsers();
+}
 
-export const deleteUser = async (id: number) => await userRepository.deleteUser(id);
+export const getUserById = async (id: number) => {
+    return await userRepository.getUserById(id);
+}
+
+export const deleteUser = async (id: number) => {
+    return await userRepository.deleteUser(id);
+}
 
 export const createUser = async (data: IUserSigninDetails) => {
     const { username, email, password } = data;
 
-    return await userRepository.createUser({ username, email, password: generateUserPassword(password) });
+    return await userRepository.createUser({ username, email, password: generatePasswordHash(password) });
 }
 
-export const updateUser = async (id: number, data: IUserType) => {
-    const protectedData = { ...data, password: generateUserPassword(data.password) }
+export const updateUser = async (id: number, userData: IUserType) => {
+    const { password, ...data } = userData;
 
-    return await userRepository.updateUser(id, protectedData);
-}
-
-export const generateUserPassword = (password: string) => {
-    const passwordHash: string = generatePasswordHash(password);
-
-    return passwordHash;
+    return await userRepository.updateUser(id, { ...data, password: generatePasswordHash(password) });
 }
