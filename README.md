@@ -30,7 +30,7 @@ private keys:
 
 ```bash
 openssl ecparam -name secp384r1 -genkey -noout -out private-a.key
-openssl ecparam -name secp384r1 -genkey -noout -out private-a.key
+openssl ecparam -name secp384r1 -genkey -noout -out private-r.key
 ```
 
 public keys:
