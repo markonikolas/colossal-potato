@@ -46,14 +46,3 @@ export const deleteUser = async (req: Request, res: Response) => {
         processError(error, res);
     }
 }
-
-// export const updateUser = async (req: Request, res: Response) => {
-//     try {
-//         const { id } = req.params;
-//         const result = await userService.updateUser(~~id, req.body);
-
-//         res.send(result);
-//     } catch (error) {
-//         processError(error, res);
-//     }
-// }

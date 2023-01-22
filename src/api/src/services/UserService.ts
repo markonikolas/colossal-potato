@@ -1,7 +1,9 @@
-import { IUserSigninDetails } from '../types/user';
-import { generateUserPassword } from "../util/authentication/authenticationFunctions";
-
 import bcrypt from 'bcrypt';
+
+import HTTP_STATUS from '../enum/HttpStatus';
+import ExtError from '../util/errors/ExtError';
+import { IUserSigninDetails, IUserType } from '../types/user';
+import { generatePassword } from "../util/authentication/authenticationFunctions";
 
 import * as hashingService from '../http/services/hashesService';
 import * as saltingService from '../http/services/saltsService';
@@ -23,7 +25,7 @@ export const deleteUser = async (id: number) => {
 export const createUser = async (data: IUserSigninDetails) => {
     const { username, email, password: plainTextPassword } = data;
     const salt = bcrypt.genSaltSync();
-    const password = generateUserPassword(plainTextPassword, salt);
+    const password = generatePassword(plainTextPassword, salt);
 
     const isHashSaved = await hashingService.setHash(username, password);
     const isSaltSaved = await saltingService.setSalt(username, salt);
@@ -32,9 +34,3 @@ export const createUser = async (data: IUserSigninDetails) => {
         return await userRepository.createUser({ username, email });
     }
 }
-
-// export const updateUser = async (id: number, userData: IUserType) => {
-//     const { password, ...data } = userData;
-
-//     return await userRepository.updateUser(id, { ...data, password: generatePasswordHash(password) });
-// }

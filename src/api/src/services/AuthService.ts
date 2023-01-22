@@ -6,11 +6,11 @@ import HTTP_STATUS from '../enum/HttpStatus';
 import ExtError from '../util/errors/ExtError';
 import { isCredentialEmpty } from '../util/validation/fields';
 import {
-    validateUserPassword,
-    generateUserPassword,
-    authenticateRefreshToken,
+    validatePassword,
+    generatePassword,
+    validateRefreshToken,
+    generateRefreshToken,
     generateAccessToken,
-    generateRefreshToken
 } from '../util/authentication/authenticationFunctions';
 
 import * as redisService from './RedisService';
@@ -36,7 +36,7 @@ export const signin = async (req: Request, res: Response) => {
     const hash = await hashesService.getHash(username);
     const salt = await saltsService.getSalt(username);
 
-    const isPasswordValid = validateUserPassword(password, hash, salt);
+    const isPasswordValid = validatePassword(password, hash, salt);
 
     if (!isPasswordValid) {
         throw new ExtError(HTTP_STATUS.UNAUTHORIZED, 'The given password is invalid.')
@@ -78,7 +78,7 @@ export const signup = async (req: Request, res: Response) => {
     }
 
     const passwordSalt = await bcrypt.genSalt();
-    const passwordHash = generateUserPassword(password, passwordSalt);
+    const passwordHash = generatePassword(password, passwordSalt);
 
     await hashesService.setHash(username, passwordHash);
     await saltsService.setSalt(username, passwordSalt);
@@ -97,7 +97,7 @@ export const refreshToken = async (req: Request, res: Response) => {
         const { refreshToken } = req.cookies;
         res.clearCookie('refreshToken');
 
-        const user = await authenticateRefreshToken(refreshToken);
+        const user = await validateRefreshToken(refreshToken);
 
         if (user && typeof user !== 'string') {
             const { username } = user;

@@ -10,7 +10,7 @@ import ExtError from '../errors/ExtError';
 const isSecretEmpty = isCredentialEmpty(HTTP_STATUS.BAD_REQUEST);
 const throwErrorIfSecretEmpty = isSecretEmpty('Secret');
 
-export const validateUserPassword = async (password: string, savedHash: string, salt: string) => {
+export const validatePassword = async (password: string, savedHash: string, salt: string) => {
     const passwordHash = await bcrypt.hash(password, salt);
 
     const isPasswordValid = passwordHash === savedHash;
@@ -22,7 +22,7 @@ export const validateUserPassword = async (password: string, savedHash: string, 
     return passwordHash;
 }
 
-export const generateUserPassword = (password: string, salt: string) => {
+export const generatePassword = (password: string, salt: string) => {
     const passwordHash = bcrypt.hashSync(password, salt);
 
     return passwordHash;
@@ -36,7 +36,7 @@ export const generateToken = (secretOrKey: string | Buffer, options?: SignOption
     return token;
 }
 
-export const authenticateToken = (secretOrKey: string | Buffer, options?: SignOptions) => async (token: string) => {
+export const validateToken = (secretOrKey: string | Buffer, options?: SignOptions) => async (token: string) => {
     throwErrorIfSecretEmpty(secretOrKey);
 
     return jwt.verify(token, secretOrKey, options);
@@ -44,10 +44,10 @@ export const authenticateToken = (secretOrKey: string | Buffer, options?: SignOp
 
 const generateES384AccessToken = generateToken(ACCESS.PRIVATE, { algorithm: 'ES384' });
 const generateES384RefreshToken = generateToken(REFRESH.PRIVATE, { algorithm: 'ES384' });
-const authenticateES384AccessToken = authenticateToken(ACCESS.PUBLIC, { algorithm: 'ES384' })
-const authenticateES384RefreshToken = authenticateToken(REFRESH.PUBLIC, { algorithm: 'ES384' })
+const validateES384AccessToken = validateToken(ACCESS.PUBLIC, { algorithm: 'ES384' })
+const validateES384RefreshToken = validateToken(REFRESH.PUBLIC, { algorithm: 'ES384' })
 
 export const generateAccessToken = generateES384AccessToken;
 export const generateRefreshToken = generateES384RefreshToken;
-export const authenticateAccessToken = authenticateES384AccessToken;
-export const authenticateRefreshToken = authenticateES384RefreshToken;
+export const validateAccessToken = validateES384AccessToken;
+export const validateRefreshToken = validateES384RefreshToken;
