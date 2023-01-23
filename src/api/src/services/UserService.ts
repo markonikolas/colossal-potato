@@ -1,8 +1,6 @@
 import bcrypt from 'bcrypt';
 
-import HTTP_STATUS from '../enum/HttpStatus';
-import ExtError from '../util/errors/ExtError';
-import { IUserSigninDetails, IUserType } from '../types/user';
+import { IUserSigninDetails } from '../types/user';
 import { generatePassword } from "../util/authentication/authenticationFunctions";
 
 import * as hashingService from '../http/services/hashesService';
