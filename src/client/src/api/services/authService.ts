@@ -1,17 +1,17 @@
 import * as authClient from '../client/authClient';
 
 export const signin = async (username: string, password: string) => {
-    const token = await authClient.signin(username, password)
+    const token = await authClient.signin(username, password);
 
-    localStorage.setItem('token', JSON.stringify(token.accessToken));
-    localStorage.setItem('loggedIn', 'true');
+    localStorage.setItem('colossal-potato-at', JSON.stringify(token.accessToken));
+    localStorage.setItem('isAuthenticated', 'true');
 
     return token;
 };
 
 export const signout = async () => {
-    localStorage.setItem('token', '');
-    localStorage.setItem('loggedIn', 'false');
+    localStorage.removeItem('token');
+    localStorage.setItem('isAuthenticated', 'false');
 
     await authClient.signout();
 };

@@ -1,8 +1,8 @@
-import { SyntheticEvent, useContext, useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import { FiUser, FiLock, FiEye } from 'react-icons/fi';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom';
 
-import { AuthContext } from '../../contexts/AuthContext';
+import useAuth from '../../hooks/useAuth';
 
 import PageWrapper from '../../components/Layout/PageWrapper';
 import PageTitle from '../../components/Layout/PageTitle';
@@ -12,8 +12,13 @@ import PasswordInput from '../../components/Inputs/PasswordInput';
 import Button from '../../components/Buttons/Button';
 
 const Login = () => {
-	const { signin, loggedIn, setLoggedIn } = useContext(AuthContext);
+	const auth = useAuth();
+	const navigate = useNavigate();
+	const location = useLocation();
 
+	let from = location.state?.from?.pathname || '/';
+
+	const { signin, isAuthenticated, setIsAuthenticated } = auth;
 	const [inputValue, setInputValue] = useState('');
 	const [passwordInputValue, setPasswordInputValue] = useState('');
 
@@ -22,18 +27,22 @@ const Login = () => {
 		const target = e.target as HTMLInputElement;
 
 		handler(() => target.value);
-	}
+	};
 
 	const handleInput = onChangeHandler(setInputValue);
 	const handlePasswordInput = onChangeHandler(setPasswordInputValue);
-	const handleSubmit = async (e: any) => { 
+
+	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
 		const token = await signin(inputValue, passwordInputValue);
-			
-		if(token) setLoggedIn(true);
 
-		return token;
+		if (token) {
+			setIsAuthenticated(true);
+			navigate(from, { replace: true });
+
+			return token;
+		}
 	};
 
 	const inputStyle = {
@@ -41,8 +50,9 @@ const Login = () => {
 		fontSize: '1.25rem',
 	};
 
-	return (
-		loggedIn ? <Navigate to={{pathname: '/'}} /> :
+	return isAuthenticated ? (
+		<Navigate to={{ pathname: '/' }} />
+	) : (
 		<PageWrapper>
 			<PageTitle title='Login' />
 			<article>
@@ -57,23 +67,23 @@ const Login = () => {
 							.
 						</span>
 					</header>
-					<Form method="POST" handleSubmit={handleSubmit}>
+					<Form method='POST' handleSubmit={handleSubmit}>
 						<Input handleInput={handleInput} value={inputValue} type='text' label='Username' id='username' iconLeft={<FiUser style={inputStyle} />} />
-						<PasswordInput 
+						<PasswordInput
 							handleInput={handlePasswordInput}
 							value={passwordInputValue}
 							label='Password'
 							id='password'
-							type="password"
+							type='password'
 							iconLeft={<FiLock style={inputStyle} />}
 							iconRight={<FiEye style={{ cursor: 'pointer', ...inputStyle }} />}
 						/>
-						<Button text="Submit" />
+						<Button text='Submit' />
 					</Form>
 				</div>
 			</article>
 		</PageWrapper>
 	);
-}
+};
 
 export default Login;

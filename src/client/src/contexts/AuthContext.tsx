@@ -1,33 +1,27 @@
-import { createContext, PropsWithChildren, useState, useEffect } from "react";
+import { createContext, PropsWithChildren, useState, useEffect } from 'react';
 
 import { signin, signout, signup } from '../api/services/authService';
 
 const AuthContext = createContext<any>([]);
 
 const AuthContextProvider = (props: PropsWithChildren) => {
+	const [isAuthenticated, setIsAuthenticated] = useState<Boolean>(false);
 
-    const [loggedIn, setLoggedIn] = useState<Boolean>(false);
-   
-    useEffect(() => {
-        const isUserLoggedIn = localStorage.getItem('loggedIn') === 'true' ? true : false;
-        
-        setLoggedIn(isUserLoggedIn);
+	useEffect(() => {
+		const isUserAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
-    }, [loggedIn])
-    
-    const providerValue = {
-        signin,
-        signout,
-        signup,
-        setLoggedIn,
-        loggedIn,
-    };
+		setIsAuthenticated(isUserAuthenticated);
+	}, []);
 
-    return(
-        <AuthContext.Provider value={providerValue}>
-            {props.children}
-        </AuthContext.Provider>
-    );
-}
+	const providerValue = {
+		signin,
+		signout,
+		signup,
+		setIsAuthenticated,
+		isAuthenticated,
+	};
+
+	return <AuthContext.Provider value={providerValue}>{props.children}</AuthContext.Provider>;
+};
 
 export { AuthContext, AuthContextProvider };

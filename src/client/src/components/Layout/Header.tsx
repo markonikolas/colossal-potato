@@ -1,20 +1,21 @@
-import { FC, useContext, useState, memo } from 'react';
+import { FC, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import { Navbar } from '@material-tailwind/react';
 
 import { IHeaderProps } from './types';
 
-import { AuthContext } from '../../contexts/AuthContext';
+import useAuth from '../../hooks/useAuth';
 
 const Header: FC<IHeaderProps> = ({ logo }) => {
+	const auth = useAuth();
 	const [state, setState] = useState(false);
-	const { loggedIn, setLoggedIn, signout } = useContext(AuthContext);
+	const { signout, isAuthenticated, setIsAuthenticated } = auth;
 
 	const handleSignout = () => {
 		signout();
-		setLoggedIn(false);
-	}
+		setIsAuthenticated(false);
+	};
 
 	return (
 		<header>
@@ -45,44 +46,42 @@ const Header: FC<IHeaderProps> = ({ logo }) => {
 					}`}>
 					<div>
 						<ul className='flex flex-col-reverse space-x-0 lg:space-x-6 lg:flex-row'>
-							{
-							loggedIn &&
+							{isAuthenticated && (
 								<Link
 									to='/login'
 									onClick={handleSignout}
 									className='py-3 px-4 text-center border text-gray-600 hover:text-indigo-600 rounded-md block lg:inline lg:border-0'>
 									Log out
 								</Link>
+							)}
 
-							}
+							{isAuthenticated || (
+								<li className='mt-4 lg:mt-0'>
+									<Link
+										to='/login'
+										onClick={() => setState(false)}
+										className='py-3 px-4 text-center border text-gray-600 hover:text-indigo-600 rounded-md block lg:inline lg:border-0'>
+										Log in
+									</Link>
+								</li>
+							)}
 
-							{ loggedIn ||
-							<li className='mt-4 lg:mt-0'>
-								  <Link
-									to='/login'
-									onClick={() => setState(false)}
-									className='py-3 px-4 text-center border text-gray-600 hover:text-indigo-600 rounded-md block lg:inline lg:border-0'>
-									Log in
-								</Link>
-							</li>
-							}
-
-							{ loggedIn || 
-							<li className='mt-8 lg:mt-0'>
-								<Link
-									to='/signup'
-									onClick={() => setState(false)}
-									className='py-3 px-4 text-center text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow block lg:inline'>
-									Sign Up
-								</Link>
-							</li>
-								}
+							{isAuthenticated || (
+								<li className='mt-8 lg:mt-0'>
+									<Link
+										to='/signup'
+										onClick={() => setState(false)}
+										className='py-3 px-4 text-center text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow block lg:inline'>
+										Sign Up
+									</Link>
+								</li>
+							)}
 						</ul>
 					</div>
 				</div>
 			</Navbar>
 		</header>
 	);
-}
+};
 
-export default memo(Header);
+export default Header;
