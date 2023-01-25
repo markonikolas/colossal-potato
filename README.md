@@ -22,6 +22,9 @@ DATABASE_URL=mysql://blog:blog@db:3306/blog
 REDIS_HOST=redis
 REDIS_PASSWORD=redis
 REDIS_PORT=6379
+
+HASHING_API_URL=http://<hashing-alias>:5002/v1/api
+SALTING_API_URL=http://<salting-alias>:5003/v1/api
 ```
 
 Since we're using elliptic curve algorithm (ES384) instead of default HS256 for signing and verifying tokens, you'll need to generate two private / public key pairs for access and refresh tokens in `/api/src/keys`.
