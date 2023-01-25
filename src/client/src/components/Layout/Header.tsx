@@ -4,7 +4,6 @@ import useAuth from '../../hooks/useAuth';
 
 import { IHeaderProps } from './types';
 
-import Button from '../Buttons/Button';
 import { Link } from 'react-router-dom';
 
 const Header: FC<IHeaderProps> = () => {
