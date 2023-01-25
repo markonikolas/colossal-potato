@@ -11,7 +11,7 @@ import Signup from './pages/Signup/Signup';
 function App() {
 	return (
 		<>
-			<Header logo={'AwesomeBlog'} />
+			<Header logo={'MyBlog'} />
 			<Routes>
 				<Route index path='/' element={<Blog />} />
 				<Route path='/login' element={<Login />} />
