@@ -1,14 +1,14 @@
 import { FC } from 'react';
 import { ButtonProps } from './types';
 
-const Button: FC<ButtonProps>= ({text, disabled}) => {
-  return (
-	  <button
-        disabled={disabled}
-        className='p-3 mt-6 text-white duration-100 bg-blue-600 rounded-md shadow-md focus:shadow-none ring-offset-2 ring-blue-600 focus:ring-2 hover:bg-blue-700 font-bold text-md uppercase tracking-wide disabled:hover:bg-blue-400 disabled:bg-blue-400'>
-        {text}
-    </button>
-  )
-}
+const Button: FC<ButtonProps> = ({ text, disabled }) => {
+	return (
+		<button
+			disabled={disabled}
+			className='py-2 px-4 text-white text-sm font-bold tracking-wide rounded-lg shadow-md bg-blue-500 ring-blue-500 focus:ring-2 hover:shadow-lg hover:shadow-blue-500/40 disabled:hover:bg-blue-400 disabled:bg-blue-300 transition-colors'>
+			{text}
+		</button>
+	);
+};
 
 export default Button;
