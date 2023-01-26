@@ -13,12 +13,19 @@ const Header: FC<IHeaderProps> = () => {
 		<header className='grid'>
 			<div className='flex justify-self-center justify-between items-center max-w-7xl w-full p-8'>
 				<div id='logo'>
-					<Link
-						to='/'
-						className='text-sm font-bold tracking-wide rounded-lg py-2 px-4 ring-blue-500 focus:bg-blue-500 focus:text-white focus:outline-none transition-colors'>
+					<Link to='/' className='text-sm font-bold tracking-wide rounded-lg py-2 px-4 ring-blue-500  transition-colors'>
 						MyBlog
 					</Link>
 				</div>
+
+				<nav className='flex gap-x-4'>
+					<Link className='text-sm font-bold py-2 px-4 rounded-lg hover:text-blue-500 transition-colors' to='/'>
+						Blog
+					</Link>
+					<Link className='text-sm font-bold py-2 px-4 rounded-lg hover:text-blue-500 transition-colors' to='/dashboard'>
+						Dashboard
+					</Link>
+				</nav>
 
 				<div className='flex gap-x-4'>
 					{!isAuthenticated ? (
