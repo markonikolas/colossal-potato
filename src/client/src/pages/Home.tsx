@@ -1,5 +1,12 @@
+import PageTitle from '../components/Layout/PageTitle';
+import PageWrapper from '../components/Layout/PageWrapper';
+
 const Home = () => {
-	return <div>Home</div>;
+	return (
+		<PageWrapper>
+			<PageTitle title='Home' />
+		</PageWrapper>
+	);
 };
 
 export default Home;
