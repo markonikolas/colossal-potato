@@ -1,13 +1,16 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { IHeaderProps } from './types';
 
-import { Link } from 'react-router-dom';
-import Navigation from '../Navigation';
+import Navigation from '../Navigation/Navigation';
+import NavigationToggle from '../Navigation/NavigationToggle';
 
 const Header: FC<IHeaderProps> = () => {
+	const [toggled, setToggled] = useState(false);
+
 	return (
-		<header className='grid'>
+		<header className='grid overflow-hidden'>
 			<div className='flex justify-self-center justify-between items-center max-w-7xl w-full p-8'>
 				<div id='logo'>
 					<Link to='/' className='text-sm font-bold tracking-wide rounded-lg py-2 px-4 ring-blue-500  transition-colors'>
@@ -15,7 +18,9 @@ const Header: FC<IHeaderProps> = () => {
 					</Link>
 				</div>
 
-				<Navigation />
+				<Navigation toggled={toggled} />
+
+				<NavigationToggle toggled={toggled} setToggled={setToggled} />
 			</div>
 		</header>
 	);
