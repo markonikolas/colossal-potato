@@ -19,11 +19,11 @@ export default function Blog() {
 
 	return (
 		<PageWrapper>
-			<PageTitle title='Blog' desc='Blogs that are loved by the community. Updated every hour.' />
+			<PageTitle title='Blog' />
 			<div className='mt-12 grid gap-6 sm:grid-cols-2 md:grid-cols-3'>
-				{posts.map((item: any)=>  
+				{posts.map((item: any) => (
 					<BlogPost item={item} key={uuidv4()} />
-				)}
+				))}
 			</div>
 		</PageWrapper>
 	);
