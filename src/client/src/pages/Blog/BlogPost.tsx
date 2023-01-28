@@ -17,13 +17,13 @@ function BlogPost({ item }: BlogPostProps) {
 					<div className='flex-none w-10 h-10 rounded-full overflow-hidden'>
 						<img
 							src=''
-							className='flex items-center justify-center overflow-hidden bg-gray-300 before:text-gray-400 before:text-xs before:text-center before:opacity-0 w-full h-full'
+							className='flex items-center justify-center overflow-hidden bg-gray-400 before:text-gray-400 before:text-xs before:text-center before:opacity-0 w-full h-full'
 							alt=''
 						/>
 					</div>
 					<div className='ml-3'>
 						<span className='block text-gray-900'>Author</span>
-						<span className='block text-gray-400 text-sm'>04-04-2022</span>
+						<span className='block text-gray-500 text-sm'>04-04-2022</span>
 					</div>
 				</div>
 
