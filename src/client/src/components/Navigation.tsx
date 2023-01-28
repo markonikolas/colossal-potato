@@ -6,13 +6,15 @@ const Navigation = () => {
 	const { isAuthenticated, setIsAuthenticated, signout } = useAuth();
 
 	return (
-		<nav className='flex gap-x-4'>
+		<nav className='absolute flex flex-col md:flex-row gap-x-4 right-0 translate-x-full md:static md:translate-x-0'>
 			<Link className='text-sm font-bold py-2 px-4 rounded-lg hover:text-blue-600 transition-colors' to='/'>
 				Home
 			</Link>
+
 			<Link className='text-sm font-bold py-2 px-4 rounded-lg hover:text-blue-600 transition-colors' to='/blog'>
 				Blog
 			</Link>
+
 			{isAuthenticated ? (
 				<Link className='text-sm font-bold py-2 px-4 rounded-lg hover:text-blue-600 transition-colors' to='/dashboard'>
 					Dashboard
