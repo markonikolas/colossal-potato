@@ -13,7 +13,12 @@ const Navigation: FC<INavigationProps> = ({ toggled }) => {
 	useEffect(() => {
 		const navigation = ref.current! as HTMLElement;
 
-		navigation.classList.toggle('translate-x-1/4');
+		if (toggled) {
+			navigation.classList.replace('translate-x-full', 'translate-x-1/4');
+			return;
+		}
+
+		navigation.classList.replace('translate-x-1/4', 'translate-x-full');
 	}, [toggled]);
 
 	return (
