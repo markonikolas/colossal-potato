@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { BlogContext } from '../contexts/BlogContext';
 
@@ -16,13 +17,11 @@ const Home = () => {
 
 	return (
 		<PageWrapper>
-			<PageTitle title='Home' />
+			<PageTitle title='Home' desc='Read our latest blog posts' />
 
-			<h2>Read latest blog posts:</h2>
-
-			<section className='flex flex-wrap items-center'>
+			<section className='flex flex-wrap'>
 				{latestPosts.map((post: any) => (
-					<BlogPost item={post} />
+					<BlogPost item={post} key={uuidv4()} />
 				))}
 			</section>
 		</PageWrapper>
