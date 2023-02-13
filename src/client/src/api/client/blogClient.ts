@@ -11,3 +11,9 @@ export const getSinglePost = async (id: string) => {
 
     return response.data
 }
+
+export const getLatestPosts = async (amount: number) => {
+    const response = await axiosInstance.get(`/api/posts/?limit=${amount}`);
+
+    return response.data;
+}

@@ -5,7 +5,7 @@ function BlogPost({ item }: BlogPostProps) {
 	const { id, title, excerpt, img } = item;
 
 	return (
-		<article className='min-w-full max-w-md mx-auto mt-4 overflow-hidden rounded-xl duration-700 cursor-pointer shadow-xl shadow-indigo-50 md:shadow-gray-100 hover:shadow-3xl md:hover:-translate-y-3 md:hover:shadow-indigo-50'>
+		<article className='w-full max-w-sm mx-auto mt-4 overflow-hidden rounded-xl duration-700 cursor-pointer shadow-xl shadow-indigo-50 md:shadow-gray-100 hover:shadow-3xl md:hover:-translate-y-3 md:hover:shadow-indigo-50'>
 			<Link to={`/blog/${id}`}>
 				<img
 					src={img}
