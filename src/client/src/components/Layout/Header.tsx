@@ -18,7 +18,7 @@ const Header: FC<IHeaderProps> = () => {
 					</Link>
 				</div>
 
-				<Navigation toggled={toggled} />
+				<Navigation toggled={toggled} setToggled={setToggled} />
 
 				<NavigationToggle toggled={toggled} setToggled={setToggled} />
 			</div>
