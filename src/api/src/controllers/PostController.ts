@@ -6,7 +6,12 @@ import { processError } from '../util/errors/ProcessError';
 
 export const getAllPosts = async (req: Request, res: Response) => {
     try {
-        const result = await PostService.getAllPosts();
+        const { limit } = req.query;
+        let result = await PostService.getAllPosts();
+
+        if (limit) {
+            result = result.slice(0, ~~limit);
+        }
 
         res.send(result);
     } catch (error) {
