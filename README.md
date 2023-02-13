@@ -54,15 +54,9 @@ docker compose up --build
 Next, you'll need to sync schema with the database
 
 ```bash
-docker compose exec api /bin/sh
-```
+docker compose exec api pnpm run db:push # sync the schema
 
-then inside the api container
-
-```bash
-pnpm run db:push # sync the schema
-
-pnpm run db:seed # seed the database
+docker compose exec api pnpm run db:seed # seed the database
 ```
 
 In this project four services communicate with each other: client, api, redis and the database. Also, there is prisma studio container.
