@@ -8,6 +8,7 @@ import Blog from './pages/Blog/Blog';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Login from './pages/Login/Login';
 import Signup from './pages/Signup/Signup';
+import SingleBlogPost from './pages/SingleBlogPost/SingleBlogPost';
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 			<Routes>
 				<Route index path='/' element={<Home />} />
 				<Route index path='/blog' element={<Blog />} />
+				<Route index path='/blog/:id' element={<SingleBlogPost />} />
 				<Route path='/login' element={<Login />} />
 				<Route path='/signup' element={<Signup />} />
 				<Route

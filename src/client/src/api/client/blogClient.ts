@@ -5,3 +5,9 @@ export const getAllPosts = async () => {
 
     return response.data;
 }
+
+export const getSinglePost = async (id: string) => {
+    const response = await axiosInstance.get(`/api/posts/${id}`);
+
+    return response.data
+}
