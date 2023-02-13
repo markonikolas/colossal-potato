@@ -8,13 +8,11 @@ const usersTable = prisma.user;
 class User {
     public username: string;
     public email: string;
-    public password: string;
     public role: string;
 
-    constructor(username: string, email: string, password: string, role: string) {
+    constructor(username: string, email: string, role: string) {
         this.username = username;
         this.email = email;
-        this.password = password;
         this.role = role;
     }
 }
@@ -38,13 +36,13 @@ const seedMany = (table: any) => async (data: any) => await table.createMany({
 });
 
 const generateUsers = (count: number) => {
-    const { userName, email, password } = faker.internet;
+    const { userName, email } = faker.internet;
     const role = 'subscriber';
 
     let users = [];
 
     for (let index = 0; index < count; index++) {
-        users.push(new User(userName().toLowerCase(), email(), password(), role));
+        users.push(new User(userName().toLowerCase(), email(), role));
     }
 
     if (users.length === 1) {
